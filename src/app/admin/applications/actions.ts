@@ -9,10 +9,10 @@ export async function approveApplication(id: string) {
     try {
         // Find the application
         const app = await prisma.vendorApplication.findUnique({ where: { id } });
-        if (!app) return { success: false, error: "Application not found" };
+        if (!app) return;
 
         if (app.status !== "PENDING") {
-            return { success: false, error: "Already processed" };
+            return;
         }
 
         // Create the user account with Vendor role
@@ -43,10 +43,10 @@ export async function approveApplication(id: string) {
         });
 
         revalidatePath('/admin/applications');
-        return { success: true };
+        return;
     } catch (err) {
         console.error("Failed to approve", err);
-        return { success: false, error: "Failed to approve application" };
+        return;
     }
 }
 
@@ -57,9 +57,9 @@ export async function rejectApplication(id: string) {
             data: { status: "REJECTED" }
         });
         revalidatePath('/admin/applications');
-        return { success: true };
+        return;
     } catch (err) {
         console.error("Failed to reject", err);
-        return { success: false, error: "Failed to reject application" };
+        return;
     }
 }
