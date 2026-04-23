@@ -22,6 +22,7 @@ export interface Product {
   rating: number;
   isPopular: boolean;
   shopId: string;
+  description?: string;
 }
 
 export const shops: Shop[] = [
