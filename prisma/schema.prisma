@@ -1,0 +1,95 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  CUSTOMER
+  VENDOR
+  ADMIN
+}
+
+model User {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  name     String?
+  email    String  @unique
+  password String
+  role     Role    @default(CUSTOMER)
+  shops    Shop[]
+}
+
+model Shop {
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  image        String
+  tags         String[]
+  rating       Float     @default(0)
+  deliveryTime String
+  ownerId      String    @db.ObjectId
+  owner        User      @relation(fields: [ownerId], references: [id])
+  products     Product[]
+  orders       Order[]
+}
+
+model Product {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+  price       Float
+  image       String
+  isPopular   Boolean  @default(false)
+  isAvailable Boolean  @default(true)
+  category    String
+  shopId      String   @db.ObjectId
+  shop        Shop     @relation(fields: [shopId], references: [id])
+  orderItems  OrderItem[]
+}
+
+enum OrderStatus {
+  PENDING
+  PREPARING
+  OUT_FOR_DELIVERY
+  DELIVERED
+  CANCELLED
+}
+
+model Order {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  status        OrderStatus @default(PENDING)
+  totalAmount   Float
+  customerEmail String
+  customerName  String
+  customerPhone String
+  address       String
+  lat           Float?
+  lng           Float?
+  shopId        String      @db.ObjectId
+  shop          Shop        @relation(fields: [shopId], references: [id])
+  items         OrderItem[]
+}
+
+model OrderItem {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  orderId   String  @db.ObjectId
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String  @db.ObjectId
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int
+  price     Float
+}
+
+model VendorApplication {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  shopName  String
+  name      String
+  email     String
+  phone     String
+  status    String   @default("PENDING")
+  createdAt DateTime @default(now())
+}
