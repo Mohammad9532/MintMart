@@ -10,6 +10,7 @@ export default function OrderStatusSelect({ orderId, initialStatus }: { orderId:
     const STATUS_COLORS: Record<OrderStatus, string> = {
         PENDING: 'border-yellow-200 bg-yellow-50 text-yellow-700 dark:bg-yellow-500/10 dark:text-yellow-400 dark:border-yellow-500/20',
         PREPARING: 'border-blue-200 bg-blue-50 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400 dark:border-blue-500/20',
+        OUT_FOR_DELIVERY: 'border-purple-200 bg-purple-50 text-purple-700 dark:bg-purple-500/10 dark:text-purple-400 dark:border-purple-500/20',
         DELIVERED: 'border-emerald-200 bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20',
         CANCELLED: 'border-red-200 bg-red-50 text-red-700 dark:bg-red-500/10 dark:text-red-400 dark:border-red-500/20',
     };
@@ -30,6 +31,7 @@ export default function OrderStatusSelect({ orderId, initialStatus }: { orderId:
             >
                 <option value="PENDING">PENDING</option>
                 <option value="PREPARING">PREPARING</option>
+                <option value="OUT_FOR_DELIVERY">OUT FOR DELIVERY</option>
                 <option value="DELIVERED">DELIVERED</option>
                 <option value="CANCELLED">CANCELLED</option>
             </select>
